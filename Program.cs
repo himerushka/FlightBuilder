@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 
 namespace Gridnine.FlightCodingTest
 {
@@ -72,10 +70,10 @@ namespace Gridnine.FlightCodingTest
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
-            Console.WriteLine("Рейсы с вылетом до текущего момента времени:");
+            Console.WriteLine("Рейсы с вылетом после текущего момента времени:");
             var selectedBefore = from schedule in travels
                                  from sch in schedule.Segments
-                                 where sch.DepartureDate.CompareTo(DateTime.Now)<=0
+                                 where sch.DepartureDate.CompareTo(DateTime.Now)>0
                                  select sch;
             foreach (Segment time in selectedBefore)
             {
@@ -89,10 +87,10 @@ namespace Gridnine.FlightCodingTest
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
-            Console.WriteLine("Сегменты с датой прилёта раньше даты вылета:");
+            Console.WriteLine("Сегменты с датой прилёта не раньше даты вылета:");
             var selectedAD = from schedule in travels
                                  from sch in schedule.Segments
-                                 where sch.ArrivalDate < sch.DepartureDate
+                                 where sch.ArrivalDate >= sch.DepartureDate
                                  select sch;
             foreach (Segment time in selectedAD)
             {
@@ -106,15 +104,21 @@ namespace Gridnine.FlightCodingTest
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
-            Console.WriteLine("Общее время на земле больше двух часов:");
-            var selectedGround = from schedule in travels
+            Console.WriteLine("Общее время на земле меньше двух часов:");
+            /*
+            var selectedGates = from schedule in travels
                                  //from sch in schedule.Segments
                                  where schedule.Segments.Count() > 1
                                  select schedule;
-            foreach (Flight time in selectedGround)
+            var selectedLongGates = from gates in selectedGates
+                                    where (gates.Segments.ElementAt(0).ArrivalDate.Subtract(gates.Segments.ElementAt(1).DepartureDate)
+                                    select gates;
+            foreach (Segment time in selectedLongGates)
             {
                 //Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
             }
+            */
+
             Console.WriteLine("-------------------------------------------");
         }
         public void ShowAll()
@@ -122,7 +126,7 @@ namespace Gridnine.FlightCodingTest
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
-            Console.WriteLine("Все рейсы:");
+            Console.WriteLine("Все сегменты:");
             var selectAll = from schedule in travels
                                  from sch in schedule.Segments
                                  select sch;
