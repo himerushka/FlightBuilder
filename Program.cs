@@ -67,7 +67,7 @@ namespace Gridnine.FlightCodingTest
 
     public class SortFlights
     {
-        public void beforeNow()
+        public void BeforeNow()
         {
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
@@ -84,34 +84,49 @@ namespace Gridnine.FlightCodingTest
             Console.WriteLine("-------------------------------------------");
         }
 
-        public void arriveBeforeDeparture()
+        public void ArriveBeforeDeparture()
         {
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
             Console.WriteLine("Сегменты с датой прилёта раньше даты вылета:");
-            var selectedBefore = from schedule in travels
+            var selectedAD = from schedule in travels
                                  from sch in schedule.Segments
                                  where sch.ArrivalDate < sch.DepartureDate
                                  select sch;
-            foreach (Segment time in selectedBefore)
+            foreach (Segment time in selectedAD)
             {
                 Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
             }
             Console.WriteLine("-------------------------------------------");
         }
 
-        public void groundTime()
+        public void GroundTime()
         {
             FlightBuilder airTravels = new FlightBuilder();
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
             Console.WriteLine("Общее время на земле больше двух часов:");
-            var selectedBefore = from schedule in travels
+            var selectedGround = from schedule in travels
+                                 //from sch in schedule.Segments
+                                 where schedule.Segments.Count() > 1
+                                 select schedule;
+            foreach (Flight time in selectedGround)
+            {
+                //Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
+            }
+            Console.WriteLine("-------------------------------------------");
+        }
+        public void ShowAll()
+        {
+            FlightBuilder airTravels = new FlightBuilder();
+            IList<Flight> travels = new List<Flight> { };
+            travels = airTravels.GetFlights();
+            Console.WriteLine("Все рейсы:");
+            var selectAll = from schedule in travels
                                  from sch in schedule.Segments
-                                 //where sch.ArrivalDate < sch.DepartureDate
                                  select sch;
-            foreach (Segment time in selectedBefore)
+            foreach (Segment time in selectAll)
             {
                 Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
             }
@@ -125,8 +140,9 @@ namespace Gridnine.FlightCodingTest
         static void Main(string[] args)
         {
             SortFlights testing = new SortFlights();
-            testing.beforeNow();
-            testing.arriveBeforeDeparture();
+            testing.ShowAll();
+            testing.BeforeNow();
+            testing.ArriveBeforeDeparture();
             Console.ReadKey();
         }
     }
