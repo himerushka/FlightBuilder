@@ -105,19 +105,29 @@ namespace Gridnine.FlightCodingTest
             IList<Flight> travels = new List<Flight> { };
             travels = airTravels.GetFlights();
             Console.WriteLine("Общее время на земле меньше двух часов:");
-            /*
-            var selectedGates = from schedule in travels
-                                 //from sch in schedule.Segments
-                                 where schedule.Segments.Count() > 1
-                                 select schedule;
-            var selectedLongGates = from gates in selectedGates
-                                    where (gates.Segments.ElementAt(0).ArrivalDate.Subtract(gates.Segments.ElementAt(1).DepartureDate)
-                                    select gates;
-            foreach (Segment time in selectedLongGates)
+
+            for (int i = 0; i < travels.Count; i++)
             {
-                //Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
+                if (travels.ElementAt(i).Segments.Count>1)
+                {
+                    TimeSpan transfer= new TimeSpan();
+                    for (int j = 0; j < travels.ElementAt(i).Segments.Count-1;j++)
+                    {
+                        transfer+=travels.ElementAt(i).Segments.ElementAt(j + 1).ArrivalDate.Subtract(travels.ElementAt(i).Segments.ElementAt(j).DepartureDate);
+                    }
+                    if (transfer.TotalHours>2)
+                    {
+                        travels.RemoveAt(i);
+                    }
+                }
             }
-            */
+            var selectAll = from schedule in travels
+                            from sch in schedule.Segments
+                            select sch;
+            foreach (Segment time in selectAll)
+            {
+                Console.WriteLine($"{time.DepartureDate}-{time.ArrivalDate}");
+            }
 
             Console.WriteLine("-------------------------------------------");
         }
@@ -147,6 +157,7 @@ namespace Gridnine.FlightCodingTest
             testing.ShowAll();
             testing.BeforeNow();
             testing.ArriveBeforeDeparture();
+            testing.GroundTime();
             Console.ReadKey();
         }
     }
