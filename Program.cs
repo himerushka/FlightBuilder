@@ -39,10 +39,10 @@ namespace Gridnine.FlightCodingTest
 
         private static Flight CreateFlight(params DateTime[] dates)
         {
-            if (dates.Length % 2 != 0) throw new ArgumentException("You must pass an even number of dates,", "dates"); // если нечетное кол-во эл-тов  в массиве => ошибка
+            if (dates.Length % 2 != 0) throw new ArgumentException("You must pass an even number of dates,", "dates");
 
-            var departureDates = dates.Where((date, index) => index % 2 == 0); //дата отправки
-            var arrivalDates = dates.Where((date, index) => index % 2 == 1); //дата прибытия
+            var departureDates = dates.Where((date, index) => index % 2 == 0);
+            var arrivalDates = dates.Where((date, index) => index % 2 == 1);
 
             var segments = departureDates.Zip(arrivalDates,
                                               (departureDate, arrivalDate) =>
